@@ -109,8 +109,36 @@ class Solution:
             n = (n - 1) & n
         return count
 
+    def power(self, base, n):
+        """
+        问题: 给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。
+        思路:
+             * 1.全面考察指数的正负、底数是否为零等情况。
+             * 2.写出指数的二进制表达，例如13表达为二进制1101。
+             * 3.举例:10^1101 = 10^0001*10^0100*10^1000。
+             * 4.通过&1和>>1来逐位读取1101，为1时将该位代表的乘数累乘到最终结果。
+        :param base: 浮点数(有正负)
+        :param n: 幂(有正负, 有奇偶)
+        :return:
+        """
+        res = 1
+        curr = base
+        exponent = n
+        if n < 0:
+            assert base != 0, "分母不能w为零"
+            exponent = -n
+        elif n == 0:
+            return 1
+        while exponent != 0:
+            if exponent & 1 == 1:
+                res *= curr
+            curr *= curr
+            exponent >>= 1
+        return res if n >= 0 else (1 / res)
+
 
 if __name__ == '__main__':
     solution = Solution()
     # print(solution.rect_cover(number=1000))
-    print(solution.NumberOf1(n=29))
+    # print(solution.NumberOf1(n=29))
+    print(solution.power(-2, -1))
