@@ -136,9 +136,17 @@ class Solution:
             exponent >>= 1
         return res if n >= 0 else (1 / res)
 
+    def reOrderArray(self, array):
+        """
+        问题: 输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，
+        所有的偶数位于位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。
+        """
+        return sorted(array, key=lambda x: x %2, reverse=False)
+
 
 if __name__ == '__main__':
     solution = Solution()
     # print(solution.rect_cover(number=1000))
     # print(solution.NumberOf1(n=29))
-    print(solution.power(-2, -1))
+    # print(solution.power(-2, -1))
+    print(solution.reOrderArray([1,2,3,4,5,6,7]))
