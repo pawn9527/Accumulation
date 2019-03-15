@@ -6,6 +6,7 @@
 日期:18-3-9
 时间:下午5:30
 """
+from typing import List
 
 
 class Solution:
@@ -40,7 +41,7 @@ class Solution:
         for x in range(1, number + 1):
             a, b = b, a + b
         return a
-
+    
     # 看错题目了, 看成计算二进制了
     def NumberOf1(self, n):
         """
@@ -55,7 +56,7 @@ class Solution:
         :return:
         """
         binary_list = []
-
+        
         def gen(x):
             divisor = x // 2
             remainder = x - divisor * 2
@@ -66,13 +67,13 @@ class Solution:
                 return binary_list[::-1]
             else:
                 return gen(divisor)
-
+        
         if n < 0:
             origin = gen(abs(n))
             reverse_code = list(map(lambda x: 1 - x, origin))
-
+            
             def up(origin_list, index):
-
+                
                 end_number = origin_list[index]
                 if end_number == 1:
                     origin_list[index] = 0
@@ -80,14 +81,14 @@ class Solution:
                 else:
                     origin_list[index] = 1
                     return origin_list
-
+            
             complement_code = up(reverse_code, len(reverse_code) - 1)
             return complement_code
         elif n == 0:
             return [0]
         else:
             return gen(n)
-
+    
     def NumbersOf1(self, n):
         """
         输入一个整数，输出该数二进制表示中1的个数。其中负数用补码表示.
@@ -108,7 +109,7 @@ class Solution:
             count += 1
             n = (n - 1) & n
         return count
-
+    
     def power(self, base, n):
         """
         问题: 给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。
@@ -135,13 +136,36 @@ class Solution:
             curr *= curr
             exponent >>= 1
         return res if n >= 0 else (1 / res)
-
+    
     def reOrderArray(self, array):
         """
         问题: 输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，
         所有的偶数位于位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。
         """
-        return sorted(array, key=lambda x: x %2, reverse=False)
+        return sorted(array, key=lambda x: x % 2, reverse=False)
+    
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        if len(nums) < 1:
+            return []
+        other_dict = {}
+        for i in range(len(nums)):
+            if nums[i] in other_dict:
+                return [other_dict[nums[i]], i]
+            else:
+                other_dict[target - nums[i]] = i
+    
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        used_char = {}
+        start = max_length = 0
+        for index, char in enumerate(s):
+            if char in used_char and start <= used_char[char]:
+                start = used_char[char] + 1
+            else:
+                max_length = max(max_length, index - start + 1)
+            
+            used_char[char] = index
+        
+        return max_length
 
 
 if __name__ == '__main__':
@@ -149,4 +173,6 @@ if __name__ == '__main__':
     # print(solution.rect_cover(number=1000))
     # print(solution.NumberOf1(n=29))
     # print(solution.power(-2, -1))
-    print(solution.reOrderArray([1,2,3,4,5,6,7]))
+    # print(solution.reOrderArray([1,2,3,4,5,6,7]))
+    # print(solution.twoSum([1, 3, 6, 10, 9, 29, 31], 38))
+    print(solution.lengthOfLongestSubstring("jbapnadsf"))
