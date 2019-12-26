@@ -1,0 +1,93 @@
+import numpy as np 
+import matplotlib.pyplot as plt #绘制可视化仿真图 
+import pandas as pd # 表结构：数据分析库
+import seaborn as sns
+from sklearn.model_selection import train_test_split # 分割数据集的方法
+
+"""
+一、加载数据集    pd.read_csv("*****.csv")
+二、分割数据集    train_test_split(X , y  , test_size = 0.2)
+三、选择/建立模型  sciklit-learn算法库 knn =KNeighborsClassifier(n_neighbors=5)
+四、训练模型   y^ = knn.fit(x_train )  
+五、准确率   acc = accuracy_score(y_test, y_pred)
+"""
+
+# 用于在jupyter中进行绘图
+%matplotlib inline
+
+# 一、加载数据集
+fruits_df = pd.read_table('fruit_data_with_colors.txt')
+fruits_df.head(20)
+
+print('样本个数：', len(fruits_df))
+
+# 创建目标标签和名称的字典
+fruit_name_dict = dict(zip(fruits_df['fruit_label'], fruits_df['fruit_name']))
+print(fruit_name_dict)
+
+# 二、划分数据集
+X = fruits_df[['mass', 'width', 'height', 'color_score']] #X1 X2 X3 X4 59行 * 4列 = 特征矩阵 
+y = fruits_df['fruit_label'] # 59行 * 1列 = 标签矩阵
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=1/4, random_state=0)
+
+print('数据集样本数：{}，训练集样本数：{}，测试集样本数：{}'.format(len(X), len(X_train), len(X_test)))
+
+%matplotlib notebook
+from mpl_toolkits.mplot3d import Axes3D
+
+%matplotlib inline
+import matplotlib as mpl #导入可视化的工具
+label_color_dict = {1: 'red', 2: 'green', 3: 'blue', 4: 'yellow'}
+colors = list(map(lambda label: label_color_dict[label], y_train))
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(X_train['width'], X_train['height'], X_train['color_score'], c=colors, marker='*', s=100)
+ax.set_xlabel('width')
+ax.set_ylabel('height')
+ax.set_zlabel('color_score')
+plt.show()
+
+
+# 三、选择/建立模型
+from sklearn.neighbors import KNeighborsClassifier
+knn = KNeighborsClassifier(n_neighbors=5)
+
+# 四、练模型
+knn.fit(X_train, y_train)
+
+# 五、测试模型
+y_pred = knn.predict(X_test)
+print(y_pred)
+
+from sklearn.metrics import accuracy_score
+
+acc = accuracy_score(y_test, y_pred)
+print('准确率：', acc)
+
+
+%matplotlib inline
+# 查看K值对结果的影响
+k_range = range(1, 20) #k = 1~19
+acc_scores = []
+
+for k in k_range:
+    knn = KNeighborsClassifier(n_neighbors=k) # 三、选择/建立模型
+    knn.fit(X_train, y_train) # 四、训练模型 ： 模型已经训练OK了
+    acc_scores.append(knn.score(X_test, y_test))
+    
+plt.figure()
+plt.xlabel('k')
+plt.ylabel('accuracy')
+plt.scatter(k_range, acc_scores) #散点图
+plt.xticks([0, 5, 10, 15, 20])
+plt.show()
+
+
+
+
+
+
+
+
