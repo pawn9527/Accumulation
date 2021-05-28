@@ -324,7 +324,7 @@ q(x) 表示将样本 x 分到了 某个叶子节点上,  w 是叶子节点的分
 ### 1.4.6 XGBoost 的打分函数
 
 $$
-\widetilde{L}^* = - \frac{1}{2}\sum_{j=1}^T\color{red}\frac{G_j^2}{H_j +\lambda} \color{black} + \gamma T
+\widetilde{L}^* = - \frac{1}{2}\sum_{j=1}^T \color{red}{ \frac{G_j^2}{H_j +\lambda}} \color{black} + \gamma T
 $$
 
 标红部分衡量了每个叶子节点对总体损失的贡献, 我们希望损失越小越好, 则标红的值越大越好.
